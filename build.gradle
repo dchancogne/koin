@@ -1,0 +1,83 @@
+group 'io.koinlabs'
+description = 'Koin Blockchain'
+version = 0.1
+
+buildscript {
+    ext.kotlin_version = '1.2.71'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.1'
+    }
+
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'application'
+
+mainClassName = 'org.koinlabs.NodeKt'
+archivesBaseName = 'koin-node'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.2.71'
+    compile 'org.jetbrains.kotlin:kotlin-reflect:1.2.71'
+    compile 'io.javalin:javalin:2.4.0'
+    compile 'org.slf4j:slf4j-simple:1.7.25'
+    compile 'io.github.microutils:kotlin-logging:1.4.6'
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.0'
+    compile 'org.eclipse.jetty.websocket:websocket-server:9.4.7.v20170914'
+    
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.1'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.1'
+}
+
+sourceSets {
+    main {
+        kotlin {
+            srcDir 'src'
+        }
+    }
+    test {
+        kotlin {
+            srcDir 'tests'
+        }
+    }
+}
+
+// tell the jar which class to startup in.
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.koinlabs.NodeKt'
+    }
+}   
+
+junitPlatform {
+    // platformVersion '1.0.1'
+    filters {
+        engines {
+            // include 'junit-jupiter', 'junit-vintage'
+            // exclude 'custom-engine'
+        }
+        tags {
+            // include 'fast'
+            exclude 'slow'
+        }
+        // includeClassNamePattern '.*Test'
+    }
+    // enableStandardTestTask true
+    // reportsDir file('build/test-results/junit-platform') // this is the default
+//    logManager 'org.apache.logging.log4j.jul.LogManager'
+}
+
+
+
